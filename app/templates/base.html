@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Medicine Recommendation System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #2a9d8f;
+            --secondary-color: #264653;
+            --accent-color: #287271;
+            --success-color: #40916c;
+            --warning-color: #e9c46a;
+            --danger-color: #e76f51;
+            --light-color: #f8f9fa;
+            --dark-color: #1b3a4b;
+            --bg-color: #ffffff;
+            --text-color: #2d3436;
+            --text-muted: #6c757d;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .navbar {
+            padding: 1rem 0;
+            background: var(--secondary-color) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: rgba(255,255,255,.9) !important;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem !important;
+            border-radius: 6px;
+            margin: 0 0.2rem;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background: rgba(255,255,255,.1);
+        }
+
+        .nav-link.active {
+            background: rgba(255,255,255,.15);
+            color: white !important;
+        }
+
+        /* Common card styles */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,.12);
+        }
+
+        /* Feature cards */
+        .feature-card {
+            padding: 1.25rem;
+            height: 100%;
+            text-align: center;
+        }
+
+        .feature-card .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1rem 0;
+        }
+
+        .feature-card .card-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Stats cards */
+        .stats-card {
+            text-align: center;
+            padding: 1.25rem;
+            height: 100%;
+            background: white;
+        }
+
+        .stats-card .number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .stats-card .label {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            font-weight: 500;
+            opacity: 0.9;
+            white-space: nowrap;
+        }
+
+        /* Step cards */
+        .step-card {
+            padding: 1.25rem;
+            height: 100%;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .step-card:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .step-card h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0.75rem 0;
+        }
+
+        .step-card p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .feature-card, .stats-card, .step-card {
+                padding: 1rem;
+            }
+            .stats-card .number {
+                font-size: 1.5rem;
+            }
+            .feature-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Grid spacing */
+        .g-4 {
+            gap: 0.75rem !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(42, 157, 143, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(42, 157, 143, 0.3);
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+
+        .badge {
+            padding: 0.5em 1em;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+
+        .bg-gradient-primary {
+            background: var(--primary-color) !important;
+        }
+
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+
+        .border {
+            border-color: var(--border-color) !important;
+        }
+
+        .table {
+            border-color: var(--border-color);
+        }
+
+        .table th {
+            font-weight: 600;
+            color: var(--text-color);
+            background-color: rgba(42, 157, 143, 0.05);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border-color: var(--border-color);
+            padding: 0.6rem 1rem;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(42, 157, 143, 0.15);
+        }
+
+        .input-group-text {
+            border-radius: 8px;
+            border-color: var(--border-color);
+            background-color: var(--light-color);
+        }
+
+        .page-header {
+            background: var(--primary-color);
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+            padding: 3rem 0;
+            margin-top: 4rem;
+            color: #fff;
+        }
+
+        footer h5 {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        footer p, 
+        footer li {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        footer .footer-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer .footer-link:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        footer hr {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        footer .bi {
+            color: var(--primary-color);
+        }
+
+        footer .copyright {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Additional Styles */
+        .bg-success {
+            background-color: var(--success-color) !important;
+        }
+
+        .bg-warning {
+            background-color: var(--warning-color) !important;
+        }
+
+        .bg-danger {
+            background-color: var(--danger-color) !important;
+        }
+
+        .stats-icon {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 1.5rem;
+            height: 100%;
+            background: white;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,.12);
+        }
+
+        .stats-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .stats-card .label {
+            font-size: 1rem;
+            color: var(--text-color);
+            font-weight: 500;
+            opacity: 0.9;
+            white-space: nowrap;
+        }
+
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+
+        .py-5 {
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
+        }
+
+        .g-4 {
+            gap: 1rem !important;
+        }
+
+        @media (max-width: 768px) {
+            .stats-card {
+                padding: 1rem;
+            }
+            .stats-card .number {
+                font-size: 1.5rem;
+            }
+            .stats-card .label {
+                font-size: 0.9rem;
+            }
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1;
+            transform: translate(50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+        <div class="container">
+            <a class="navbar-brand text-primary" href="{{ url_for('main.index') }}">
+                <i class="bi bi-heart-pulse-fill me-2"></i>MedRec
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {{ 'active' if request.endpoint == 'main.index' }}" href="{{ url_for('main.index') }}">
+                            <i class="bi bi-house-door me-1"></i>Home
+                        </a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.is_admin() %}
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'active' if request.endpoint.startswith('admin.') }}" href="{{ url_for('admin.dashboard') }}">
+                                    <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% if not current_user.is_medical_expert() %}
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'active' if request.endpoint == 'main.predict' }}" href="{{ url_for('main.predict') }}">
+                                    <i class="bi bi-clipboard2-pulse me-2"></i>Disease Prediction
+                                </a>
+                            </li>
+                            {% if current_user.is_patient() %}
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'active' if request.endpoint == 'main.chat_list' }}" 
+                                   href="{{ url_for('main.history', view='chats') }}">
+                                    <i class="bi bi-chat-dots me-2"></i>My Chats
+                                    {% set unread_count = current_user.messages_received.filter_by(is_read=False).count() %}
+                                    {% if unread_count > 0 %}
+                                    <span class="badge bg-primary rounded-pill ms-1">{{ unread_count }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ 'active' if request.endpoint == 'main.history' and request.args.get('view') != 'chats' }}" 
+                                   href="{{ url_for('main.history') }}">
+                                    <i class="bi bi-clock-history me-2"></i>Prediction History
+                                </a>
+                            </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="nav-item position-relative">
+                                <a class="nav-link" href="{{ url_for('main.expert_notifications') }}">
+                                    <i class="bi bi-bell me-1"></i>Notifications
+                                    {% if unread_count and unread_count > 0 %}
+                                        <span class="badge bg-danger notification-badge">{{ unread_count }}</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('main.profile') }}">Profile</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.about') }}">About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    {% if current_user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link text-muted me-3">
+                                <i class="bi bi-person-circle me-1"></i>
+                                {{ current_user.get_display_name() }}
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary" href="{{ url_for('auth.logout') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary me-2" href="{{ url_for('auth.login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary" href="{{ url_for('auth.register') }}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container mt-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>About MedRec</h5>
+                    <p class="text-light opacity-75">
+                        A smart healthcare solution that helps you identify potential health issues and recommends appropriate medications.
+                    </p>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('main.index') }}" class="footer-link">Home</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li class="mb-2"><a href="{{ url_for('main.predict') }}" class="footer-link">Disease Prediction</a></li>
+                            <li class="mb-2"><a href="{{ url_for('main.history') }}" class="footer-link">History</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-envelope me-2"></i>support@medrec.com</li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i>+1 (555) 123-4567</li>
+                        <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>123 Healthcare Ave, Medical District</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mt-4 mb-4">
+            <div class="text-center copyright">
+                <small>&copy; 2025 MedRec. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

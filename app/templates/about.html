@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-info-circle-fill display-1 text-primary mb-3"></i>
+                        <h2 class="card-title">About MedExpert</h2>
+                        <p class="text-muted">Your AI-Powered Medical Assistant</p>
+                    </div>
+
+                    <div class="about-content">
+                        <section class="mb-5">
+                            <h4 class="text-primary mb-3">What We Do</h4>
+                            <p>MedExpert is an innovative medical prediction system that combines artificial intelligence with expert medical knowledge. Our platform helps users identify potential health conditions based on their symptoms and connects them with qualified medical experts for personalized consultation.</p>
+                        </section>
+
+                        <section class="mb-5">
+                            <h4 class="text-primary mb-3">How It Works</h4>
+                            <div class="row g-4">
+                                <div class="col-md-4">
+                                    <div class="text-center p-3">
+                                        <i class="bi bi-clipboard2-pulse display-5 text-primary mb-3"></i>
+                                        <h5>Input Symptoms</h5>
+                                        <p class="small text-muted">Enter your symptoms into our advanced prediction system</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center p-3">
+                                        <i class="bi bi-robot display-5 text-primary mb-3"></i>
+                                        <h5>AI Analysis</h5>
+                                        <p class="small text-muted">Our AI analyzes your symptoms and provides potential matches</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center p-3">
+                                        <i class="bi bi-chat-dots display-5 text-primary mb-3"></i>
+                                        <h5>Expert Chat</h5>
+                                        <p class="small text-muted">Connect with medical experts for professional advice</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="mb-5">
+                            <h4 class="text-primary mb-3">Important Note</h4>
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle me-2"></i>
+                                This system is designed to assist, not replace, professional medical advice. Always consult with a qualified healthcare provider for proper diagnosis and treatment.
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-gradient-primary text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Analytics Dashboard</h1>
+                <p class="lead mb-0">Gain insights into your healthcare system's performance and trends.</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="bi bi-graph-up display-1"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Last Update Info -->
+    <div class="alert alert-light border-0 shadow-sm mb-4">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+                <i class="bi bi-clock-history text-primary fs-4 me-3"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h6 class="alert-heading mb-1">Last Updated</h6>
+                <p class="mb-0">{{ now.strftime('%B %d, %Y at %I:%M %p') }}</p>
+            </div>
+            <div class="flex-shrink-0">
+                <a href="{{ url_for('admin.analytics') }}" class="btn btn-sm btn-primary">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Refresh Data
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4">
+                        <i class="bi bi-people text-primary me-2"></i>User Statistics
+                    </h5>
+                    <div class="stats-item d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Total Users</span>
+                        <span class="badge bg-primary rounded-pill fs-6">{{ total_users }}</span>
+                    </div>
+                    <div class="stats-item d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Patients</span>
+                        <span class="badge bg-success rounded-pill fs-6">{{ total_patients }}</span>
+                    </div>
+                    <div class="stats-item d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Medical Experts</span>
+                        <span class="badge bg-info rounded-pill fs-6">{{ total_experts }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4">
+                        <i class="bi bi-clipboard2-pulse text-primary me-2"></i>Prediction Statistics
+                    </h5>
+                    <div class="stats-item d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Total Predictions</span>
+                        <span class="badge bg-primary rounded-pill fs-6">{{ total_predictions }}</span>
+                    </div>
+                    <div class="stats-item d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Unique Diseases</span>
+                        <span class="badge bg-success rounded-pill fs-6">{{ total_diseases }}</span>
+                    </div>
+                    <div class="stats-item d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Unique Medicines</span>
+                        <span class="badge bg-info rounded-pill fs-6">{{ total_medicines }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-4">
+                        <i class="bi bi-speedometer2 text-primary me-2"></i>System Performance
+                    </h5>
+                    <div class="stats-item d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Avg. Predictions/User</span>
+                        <span class="badge bg-primary rounded-pill fs-6">
+                            {{ (total_predictions / total_patients)|round(1) if total_patients > 0 else 0 }}
+                        </span>
+                    </div>
+                    <div class="stats-item d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Experts/Patient Ratio</span>
+                        <span class="badge bg-success rounded-pill fs-6">
+                            1:{{ (total_patients / total_experts)|round(1) if total_experts > 0 else 0 }}
+                        </span>
+                    </div>
+                    <div class="stats-item d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Medicines/Disease Ratio</span>
+                        <span class="badge bg-info rounded-pill fs-6">
+                            {{ (total_medicines / total_diseases)|round(1) if total_diseases > 0 else 0 }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <!-- Top Diseases Chart -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 py-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart text-primary me-2"></i>Top Predicted Diseases
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="topDiseasesChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Symptoms Chart -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 py-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clipboard2-data text-primary me-2"></i>Most Common Symptoms
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="topSymptomsChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Prediction Trends Chart -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 py-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-graph-up-arrow text-primary me-2"></i>Prediction Trends
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="predictionTrendsChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Registration Trends Chart -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0 py-3">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-plus text-primary me-2"></i>User Registration Trends
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="userTrendsChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Chart Colors
+        const colors = {
+            primary: '#2a9d8f',
+            secondary: '#264653',
+            success: '#40916c',
+            warning: '#e9c46a',
+            danger: '#e76f51',
+            info: '#4cc9f0',
+            light: '#f8f9fa',
+            dark: '#1b3a4b'
+        };
+
+        // Top Diseases Chart
+        const topDiseasesCtx = document.getElementById('topDiseasesChart').getContext('2d');
+        new Chart(topDiseasesCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for disease in top_diseases %}
+                        "{{ disease.name }}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Number of Predictions',
+                    data: [
+                        {% for disease in top_diseases %}
+                            {{ disease.count }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: colors.primary,
+                    borderColor: colors.primary,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+
+        // Top Symptoms Chart
+        const topSymptomsCtx = document.getElementById('topSymptomsChart').getContext('2d');
+        new Chart(topSymptomsCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for symptom in top_symptoms %}
+                        "{{ symptom.name }}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Frequency',
+                    data: [
+                        {% for symptom in top_symptoms %}
+                            {{ symptom.count }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: colors.success,
+                    borderColor: colors.success,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+
+        // Prediction Trends Chart
+        const predictionTrendsCtx = document.getElementById('predictionTrendsChart').getContext('2d');
+        new Chart(predictionTrendsCtx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for trend in prediction_trends %}
+                        "{{ trend.month }}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Predictions',
+                    data: [
+                        {% for trend in prediction_trends %}
+                            {{ trend.count }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: 'rgba(42, 157, 143, 0.2)',
+                    borderColor: colors.primary,
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+
+        // User Registration Trends Chart
+        const userTrendsCtx = document.getElementById('userTrendsChart').getContext('2d');
+        new Chart(userTrendsCtx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for trend in user_trends %}
+                        "{{ trend.month }}",
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'New Users',
+                    data: [
+                        {% for trend in user_trends %}
+                            {{ trend.count }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: 'rgba(38, 70, 83, 0.2)',
+                    borderColor: colors.secondary,
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

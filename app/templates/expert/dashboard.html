@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-4">Medical Expert Dashboard</h2>
+            {% if not current_user.is_approved %}
+            <div class="alert alert-warning">
+                Your account is pending approval from an administrator. Some features may be limited.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Overview Cards -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card stats-card">
+                <div class="number text-primary">{{ total_reviews }}</div>
+                <div class="label">Total Reviews</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card stats-card">
+                <div class="number text-success">{{ pending_reviews }}</div>
+                <div class="label">Pending Reviews</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card stats-card">
+                <div class="number text-info">{{ approved_predictions }}</div>
+                <div class="label">Approved Predictions</div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="card stats-card">
+                <div class="number text-warning">{{ flagged_cases }}</div>
+                <div class="label">Flagged Cases</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pending Reviews Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Pending Reviews</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Predicted Disease</th>
+                                    <th>Confidence</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for review in pending_cases %}
+                                <tr>
+                                    <td>{{ review.patient_id }}</td>
+                                    <td>{{ review.predicted_disease }}</td>
+                                    <td>{{ review.confidence }}%</td>
+                                    <td>{{ review.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('expert.review_case', case_id=review.id) }}" class="btn btn-sm btn-primary">Review</a>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No pending reviews</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Patient ID</th>
+                                    <th>Details</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for activity in recent_activities %}
+                                <tr>
+                                    <td>{{ activity.action }}</td>
+                                    <td>{{ activity.patient_id }}</td>
+                                    <td>{{ activity.details }}</td>
+                                    <td>{{ activity.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No recent activity</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

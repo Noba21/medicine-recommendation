@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header bg-gradient-primary text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Disease Prediction</h1>
+                <p class="lead mb-0">Get accurate disease predictions using our advanced AI system. Simply select your symptoms below and let our intelligent algorithm analyze them for you.</p>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="bi bi-activity display-1"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- How It Works Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">How Disease Prediction Works</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon text-primary mb-3">
+                                <i class="bi bi-list-check fs-1"></i>
+                            </div>
+                            <h5>1. Select Symptoms</h5>
+                            <p class="text-muted">Choose all the symptoms you're experiencing from our comprehensive list.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon text-primary mb-3">
+                                <i class="bi bi-cpu fs-1"></i>
+                            </div>
+                            <h5>2. AI Analysis</h5>
+                            <p class="text-muted">Our AI system analyzes your symptoms using advanced machine learning algorithms.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon text-primary mb-3">
+                                <i class="bi bi-clipboard2-pulse fs-1"></i>
+                            </div>
+                            <h5>3. Get Results</h5>
+                            <p class="text-muted">Receive detailed predictions and recommended medicines based on the analysis.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prediction Form -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="card-title text-center mb-4">Select Your Symptoms</h3>
+                    <form method="post" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label for="symptoms" class="form-label">Symptoms <span class="text-danger">*</span></label>
+                            <select multiple class="form-select form-select-lg" id="symptoms" name="symptoms" required size="8">
+                                {% for symptom in symptoms %}
+                                <option value="{{ symptom }}">{{ symptom }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Hold Ctrl (Windows) or Command (Mac) to select multiple symptoms. Select at least 3 symptoms for accurate prediction.
+                            </div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-search me-2"></i>Analyze Symptoms
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Important Notes -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading"><i class="bi bi-info-circle-fill me-2"></i>Important Notes</h4>
+                <p>Please keep in mind the following when using our disease prediction system:</p>
+                <ul class="mb-0">
+                    <li>This system is designed to assist, not replace professional medical advice</li>
+                    <li>Select all symptoms you're experiencing for the most accurate predictions</li>
+                    <li>If you're experiencing severe symptoms, please seek immediate medical attention</li>
+                    <li>The predictions are based on statistical analysis and may not be 100% accurate</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Form Validation Script -->
+<script>
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+{% endblock %}

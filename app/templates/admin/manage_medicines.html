@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Manage Medicines</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Add New Medicine</h5>
+            <form method="post" action="{{ url_for('admin.add_medicine') }}">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Medicine Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="dosage" class="form-label">Dosage</label>
+                    <input type="text" class="form-control" id="dosage" name="dosage">
+                </div>
+                <div class="mb-3">
+                    <label for="disease_id" class="form-label">Disease</label>
+                    <select class="form-control" id="disease_id" name="disease_id" required>
+                        {% for disease in diseases %}
+                        <option value="{{ disease.id }}">{{ disease.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Medicine</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Existing Medicines</h5>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Dosage</th>
+                            <th>Disease</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for medicine in medicines %}
+                        <tr>
+                            <td>{{ medicine.name }}</td>
+                            <td>{{ medicine.description }}</td>
+                            <td>{{ medicine.dosage }}</td>
+                            <td>{{ medicine.disease.name }}</td>
+                            <td>
+                                <a href="{{ url_for('admin.edit_medicine', id=medicine.id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <form action="{{ url_for('admin.delete_medicine', id=medicine.id) }}" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="page-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Smart Healthcare Solutions</h1>
+                <p class="lead mb-4">Experience the future of healthcare with MedRec's AI-powered disease prediction and medicine recommendation system. Get accurate predictions and personalized recommendations in minutes.</p>
+                {% if current_user.is_authenticated %}
+                    <div class="d-grid gap-3 d-sm-flex">
+                        <a href="{{ url_for('main.predict') }}" class="btn btn-light btn-lg px-4">
+                            <i class="bi bi-clipboard2-pulse me-2"></i>Start Prediction
+                        </a>
+                        <a href="{{ url_for('main.history') }}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-clock-history me-2"></i>View History
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="d-grid gap-3 d-sm-flex">
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-light btn-lg px-4">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-person-plus me-2"></i>Register
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="https://img.freepik.com/free-vector/medical-healthcare-protection-illustration_1284-64875.jpg" alt="Healthcare Illustration" class="img-fluid rounded-3 shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Why Choose MedRec?</h2>
+            <p class="text-muted">Experience the benefits of AI-powered healthcare recommendations</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-12">
+                <div class="card feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <h5 class="card-title">AI-Powered Predictions</h5>
+                        <p class="card-text text-muted">Get accurate disease predictions using our advanced machine learning algorithms.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="card feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="bi bi-capsule-pill"></i>
+                        </div>
+                        <h5 class="card-title">Smart Recommendations</h5>
+                        <p class="card-text text-muted">Receive personalized medicine recommendations based on your symptoms.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <div class="card feature-card">
+                    <div class="card-body">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5 class="card-title">Expert Supervision</h5>
+                        <p class="card-text text-muted">All recommendations are validated by healthcare professionals.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card stats-card">
+                    <div class="number">99%</div>
+                    <div class="label">Accuracy Rate</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card stats-card">
+                    <div class="number">1000+</div>
+                    <div class="label">Diseases Covered</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card stats-card">
+                    <div class="number">5000+</div>
+                    <div class="label">Medicines Listed</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card stats-card">
+                    <div class="number">24/7</div>
+                    <div class="label">Available Support</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">How It Works</h2>
+            <p class="text-muted">Simple steps to get your health recommendations</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card step-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon text-primary mb-3">
+                            <i class="bi bi-1-circle-fill"></i>
+                        </div>
+                        <h5>Create Account</h5>
+                        <p class="text-muted">Register and set up your profile</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card step-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon text-primary mb-3">
+                            <i class="bi bi-2-circle-fill"></i>
+                        </div>
+                        <h5>Enter Symptoms</h5>
+                        <p class="text-muted">Input your symptoms easily</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card step-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon text-primary mb-3">
+                            <i class="bi bi-3-circle-fill"></i>
+                        </div>
+                        <h5>Get Prediction</h5>
+                        <p class="text-muted">Receive accurate predictions</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card step-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon text-primary mb-3">
+                            <i class="bi bi-4-circle-fill"></i>
+                        </div>
+                        <h5>View Recommendations</h5>
+                        <p class="text-muted">Get medicine suggestions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

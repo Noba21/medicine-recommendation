@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="profile-avatar mb-3">
+                            <i class="bi bi-person-circle display-1 text-primary"></i>
+                        </div>
+                        <h2 class="card-title mb-1">{{ current_user.get_display_name() }}</h2>
+                        <p class="text-muted">
+                            {% if current_user.is_medical_expert() %}
+                                Medical Expert
+                            {% else %}
+                                Patient
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="profile-details">
+                        <!-- Personal Information -->
+                        <section class="mb-4">
+                            <h5 class="text-primary mb-3">Personal Information</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="text-muted small">Email</label>
+                                        <p class="mb-0">{{ current_user.email }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="text-muted small">Member Since</label>
+                                        <p class="mb-0">{{ current_user.created_at.strftime('%Y-%m-%d') if current_user.created_at else 'Not available' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        {% if current_user.is_medical_expert() %}
+                        <!-- Expert Information -->
+                        <section class="mb-4">
+                            <h5 class="text-primary mb-3">Professional Information</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="text-muted small">Specialization</label>
+                                        <p class="mb-0">{{ current_user.specialization or 'Not specified' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="text-muted small">License Number</label>
+                                        <p class="mb-0">{{ current_user.license_number or 'Not specified' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Statistics -->
+                        <section class="mb-4">
+                            <h5 class="text-primary mb-3">Activity Overview</h5>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="card bg-light border-0">
+                                        <div class="card-body text-center">
+                                            <h3 class="mb-1">{{ predictions_reviewed }}</h3>
+                                            <p class="small text-muted mb-0">Cases Reviewed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card bg-light border-0">
+                                        <div class="card-body text-center">
+                                            <h3 class="mb-1">{{ active_chats }}</h3>
+                                            <p class="small text-muted mb-0">Active Chats</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card bg-light border-0">
+                                        <div class="card-body text-center">
+                                            <h3 class="mb-1">{{ response_rate }}%</h3>
+                                            <p class="small text-muted mb-0">Response Rate</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        {% else %}
+                        <!-- Patient Statistics -->
+                        <section class="mb-4">
+                            <h5 class="text-primary mb-3">Activity Overview</h5>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="card bg-light border-0">
+                                        <div class="card-body text-center">
+                                            <h3 class="mb-1">{{ total_predictions }}</h3>
+                                            <p class="small text-muted mb-0">Total Predictions</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card bg-light border-0">
+                                        <div class="card-body text-center">
+                                            <h3 class="mb-1">{{ active_chats }}</h3>
+                                            <p class="small text-muted mb-0">Active Chats</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card bg-light border-0">
+                                        <div class="card-body text-center">
+                                            <h3 class="mb-1">{{ completed_consultations }}</h3>
+                                            <p class="small text-muted mb-0">Completed Consultations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        {% endif %}
+
+                        <!-- Actions -->
+                        <div class="text-center mt-4">
+                            <a href="{{ url_for('auth.edit_profile') }}" class="btn btn-outline-primary me-2">
+                                <i class="bi bi-pencil me-2"></i>Edit Profile
+                            </a>
+                            <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-shield-lock me-2"></i>Change Password
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
